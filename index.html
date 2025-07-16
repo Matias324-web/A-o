@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1 Año Juntos - Nuestro Amor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { 
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body, html {
+      height: 100%;
+      background: linear-gradient(135deg, #f8e8ff, #e0f4ff);
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+      color: #333;
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    .bienvenida {
+      font-size: 24px;
+      color: #5a3d7a;
+      margin-bottom: 30px;
+      padding: 0 20px;
+      animation: fadeIn 2s ease;
+      font-weight: 600;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .gift-container {
+      position: relative;
+      margin: 20px 0;
+      perspective: 1000px;
+      transition: all 0.5s ease;
+    }
+
+    .gift {
+      width: 240px;
+      height: 240px;
+      background: linear-gradient(145deg, #ffd6e7, #ffb3d9);
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(255, 94, 153, 0.3);
+      position: relative;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      transform-style: preserve-3d;
+    }
+
+    .gift.hidden {
+      transform: scale(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .gift:hover { 
+      transform: scale(1.05) rotateY(10deg);
+      box-shadow: 0 20px 40px rgba(255, 94, 153, 0.4);
+    }
+
+    .gift:active {
+      transform: scale(0.98);
+    }
+
+    .lid {
+      position: absolute;
+      width: 100%;
+      height: 65px;
+      background: linear-gradient(145deg, #ff5e99, #ff2e80);
+      border-radius: 20px 20px 5px 5px;
+      top: 0;
+      left: 0;
+      transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      z-index: 2;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .ribbon-vertical, .ribbon-horizontal {
+      position: absolute;
+      background: rgba(255,255,255,0.9);
+      z-index: 3;
+    }
+
+    .ribbon-vertical {
+      width: 22px;
+      height: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .ribbon-horizontal {
+      height: 22px;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .bow {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 35px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      z-index: 4;
+    }
+
+    .bow::before, .bow::after {
+      content: "";
+      position: absolute;
+      width: 35px;
+      height: 35px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      top: 0;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .bow::before { left: -35px; }
+    .bow::after { right: -35px; }
+
+    .message {
+      font-size: 26px;
+      color: #5a3d7a;
+      margin: 30px 0 15px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease;
+      padding: 0 20px;
+      font-weight: 600;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .buttons {
+      opacity: 0;
+      transform: translateY(20px);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin: 25px 0;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .message.show, .buttons.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .buttons button {
+      padding: 14px 25px;
+      font-size: 18px;
+      background: linear-gradient(145deg, #ff5e99, #ff2e80);
+      border: none;
+      color: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(255, 94, 153, 0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .buttons button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 94, 153, 0.5);
+    }
+
+    .buttons button:active {
+      transform: translateY(1px);
+    }
+
+    .buttons button::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .buttons button:hover::after {
+      opacity: 1;
+    }
+
+    .photos {
+      display: none;
+      flex-direction: column;
+      gap: 25px;
+      margin: 30px 0;
+      width: 100%;
+      max-width: 600px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease;
+    }
+
+    .photos.show {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .photo-container {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      transition: transform 0.5s ease;
+    }
+
+    .photos img {
+      width: 100%;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .photo-container:hover {
+      transform: scale(1.02);
+    }
+
+    .photo-container:hover img {
+      transform: scale(1.05);
+    }
+
+    .photo-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: white;
+      padding: 15px;
+      font-size: 16px;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .photo-container:hover .photo-caption {
+      opacity: 1;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Carta */
+    .carta {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .carta.show {
+      opacity: 1;
+    }
+
+    .carta-contenido {
+      background: #fff8f0;
+      width: 90%;
+      max-width: 550px;
+      height: 80%;
+      max-height: 700px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      position: relative;
+      padding: 40px 30px;
+      overflow: hidden;
+      transform: scale(0.9);
+      transition: transform 0.5s ease;
+    }
+
+    .carta.show .carta-contenido {
+      transform: scale(1);
+    }
+
+    .renglones {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: repeating-linear-gradient(to bottom, transparent 0px, transparent 24px, rgba(204, 204, 204, 0.5) 25px);
+      pointer-events: none;
+    }
+
+    .carta-texto {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      overflow-y: auto;
+      padding-right: 15px;
+      font-family: 'Dancing Script', cursive;
+      font-size: 22px;
+      line-height: 2;
+      color: #5a3d7a;
+      text-align: justify;
+    }
+
+    .carta-texto::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .carta-texto::-webkit-scrollbar-track {
+      background: rgba(255, 182, 193, 0.2);
+      border-radius: 10px;
+    }
+
+    .carta-texto::-webkit-scrollbar-thumb {
+      background: rgba(255, 94, 153, 0.5);
+      border-radius: 10px;
+    }
+
+    .carta-texto::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 94, 153, 0.7);
+    }
+
+    .cerrar {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 2;
+      color: #5a3d7a;
+      background: rgba(255,255,255,0.8);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .cerrar:hover {
+      transform: rotate(90deg);
+      background: rgba(255, 94, 153, 0.8);
+      color: white;
+    }
+
+    .heart {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 100;
+    }
+
+    .audio-control {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      cursor: pointer;
+      z-index: 1001;
+      transition: all 0.3s ease;
+    }
+
+    .audio-control:hover {
+      transform: scale(1.1);
+      background: rgba(255, 94, 153, 0.8);
+      color: white;
+    }
+
+    .audio-control i {
+      font-size: 24px;
+    }
+
+    @media (max-width: 600px) {
+      .bienvenida {
+        font-size: 20px;
+      }
+      
+      .message {
+        font-size: 22px;
+      }
+      
+      .buttons button {
+        padding: 12px 20px;
+        font-size: 16px;
+      }
+      
+      .carta-contenido {
+        padding: 30px 20px;
+      }
+      
+      .carta-texto {
+        font-size: 20px;
+      }
+    }
+
+    /* Animaciones de corazones */
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes giftDisappear {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- AUDIO -->
+  <audio id="musica" loop>
+    <source src="Taylor Swift - my tears ricochet (Español  Lyrics).mp3" type="audio/mpeg">
+    Tu navegador no soporta el elemento de audio.
+  </audio>
+
+  <div class="main-container">
+    <div class="bienvenida">Hola Amor, esta es una pequeña sorpresa para vos Te Amo💝</div>
+
+    <div class="gift-container">
+      <div class="gift" id="gift-box" onclick="abrirRegalo()">
+        <div class="lid" id="lid"></div>
+        <div class="ribbon-vertical"></div>
+        <div class="ribbon-horizontal"></div>
+        <div class="bow"></div>
+      </div>
+    </div>
+
+    <div id="mensaje" class="message">💖 ¡Feliz Primer Año Juntos! 💖</div>
+
+    <div id="botones" class="buttons">
+      <button onclick="abrirCarta()"><i class="fas fa-envelope"></i> Leer carta</button>
+      <button onclick="mostrarFotos()"><i class="fas fa-images"></i> Ver fotos</button>
+    </div>
+
+    <div id="fotos" class="photos">
+      <div class="photo-container">
+        <img src="foto1.jpg" alt="❤️">
+        <div class="photo-caption"></div>
+      </div>
+      <div class="photo-container">
+        <img src="foto2.jpg" alt="❤️">
+        <div class="photo-caption"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carta -->
+  <div id="carta" class="carta">
+    <div class="carta-contenido">
+      <span class="cerrar" onclick="cerrarCarta()"><i class="fas fa-times"></i></span>
+      <div class="renglones"></div>
+      <div class="carta-texto">
+        <p style="text-align: center; font-size: 28px; margin-bottom: 20px;">Morena❤️,</p>
+        
+        <p>Bueno, qué decirte.. Ya un año juntos,La verdad que el tiempo pasó rapidísimo. Compartimos un montón de cosas, aprendimos mucho también, pero creo que lo mejor de todo fueron esos momentos felices que vivimos juntos.</p>
+
+        <p>Sos una compañía increíble para mí. Nunca me imaginé que iba a agarrarte tanto cariño como el que te tengo hoy. Sos una persona hermosa en todo sentido, por fuera y por dentro, con esos detalles que te hacen única.</p>
+
+        <p>Ojalá que podamos seguir compartiendo mucho tiempo más, porque la verdad me encanta tenerte como mi pareja. Quiero cuidarte, estar para vos y amarte por mucho tiempo.</p>
+
+        <p>Gracias por ser como sos. Te valoro un montón y te amo muchísimo.</p>  
+        
+      
+        <p style="text-align: right; font-size: 26px; margin-top: 10px;">Matias❤️</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Control de audio -->
+  <div class="audio-control" onclick="toggleMusica()">
+    <i id="audio-icon" class="fas fa-music"></i>
+  </div>
+
+  <script>
+    // Variables de estado
+    let regaloAbierto = false;
+    let musicaReproduciendo = false;
+    const audio = document.getElementById('musica');
+    const audioIcon = document.getElementById('audio-icon');
+    const giftBox = document.getElementById('gift-box');
+
+    function abrirRegalo() {
+      if (regaloAbierto) return;
+      
+      regaloAbierto = true;
+      // Abrir la tapa del regalo
+      document.getElementById('lid').style.transform = 'translateY(-80px) rotate(-20deg)';
+      
+      // Lanzar confeti inmediatamente
+      lanzarConfeti();
+      
+      // Ocultar el regalo después de un breve retraso
+      setTimeout(() => {
+        giftBox.classList.add('hidden');
+      }, 800);
+      
+      // Mostrar mensaje y botones
+      setTimeout(() => {
+        document.getElementById('mensaje').classList.add('show');
+        document.getElementById('botones').classList.add('show');
+        toggleMusica();
+      }, 1000);
+    }
+
+    function abrirCarta() {
+      const carta = document.getElementById('carta');
+      carta.style.display = 'flex';
+      setTimeout(() => carta.classList.add('show'), 10);
+    }
+
+    function cerrarCarta() {
+      const carta = document.getElementById('carta');
+      carta.classList.remove('show');
+      setTimeout(() => carta.style.display = 'none', 500);
+    }
+
+    function mostrarFotos() {
+      const fotos = document.getElementById('fotos');
+      fotos.classList.add('show');
+      // Desplazarse suavemente a las fotos
+      fotos.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toggleMusica() {
+      if (musicaReproduciendo) {
+        audio.pause();
+        audioIcon.classList.remove('fa-volume-up');
+        audioIcon.classList.add('fa-music');
+      } else {
+        audio.play().catch(e => console.log("Auto-play no permitido: ", e));
+        audioIcon.classList.remove('fa-music');
+        audioIcon.classList.add('fa-volume-up');
+      }
+      musicaReproduciendo = !musicaReproduciendo;
+    }
+
+    // Confeti mejorado
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    let confettis = [];
+    let confettiColors = ['#ff5e99', '#ffb3d9', '#ffd6e7', '#d9e8ff', '#a3d8ff', '#5e99ff'];
+
+    function lanzarConfeti() {
+      resizeCanvas();
+      for (let i = 0; i < 200; i++) {
+        confettis.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 8 + 5,
+          d: Math.random() * 50 + 10,
+          color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+          tilt: Math.random() * 10 - 5,
+          tiltAngle: Math.random() * 0.1,
+          tiltAngleIncrement: Math.random() * 0.05 + 0.01,
+          shape: Math.random() > 0.5 ? 'circle' : 'rect'
+        });
+      }
+      requestAnimationFrame(updateConfeti);
+    }
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function updateConfeti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for (let i = 0; i < confettis.length; i++) {
+        let p = confettis[i];
+        p.y += Math.cos(p.d) + 1 + p.r / 2;
+        p.tiltAngle += p.tiltAngleIncrement;
+        p.x += Math.sin(p.tiltAngle) * 2;
+        
+        ctx.beginPath();
+        ctx.fillStyle = p.color;
+        
+        if (p.shape === 'circle') {
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        } else {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.tiltAngle);
+          ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r);
+          ctx.restore();
+        }
+        
+        ctx.fill();
+      }
+      
+      confettis = confettis.filter(p => p.y < canvas.height + p.r * 2);
+      
+      if (confettis.length > 0) {
+        requestAnimationFrame(updateConfeti);
+      }
+    }
+
+    // Event listeners
+    window.addEventListener('resize', resizeCanvas);
+    
+    // Intentar reproducir música automáticamente (puede ser bloqueado por el navegador)
+    document.body.addEventListener('click', () => {
+      if (!musicaReproduciendo && regaloAbierto) {
+        audio.play().catch(e => console.log("Auto-play no permitido: ", e));
+      }
+    }, { once: true });
+
+    // Inicialización
+    resizeCanvas();
+  </script>
+</body>
+</html>
